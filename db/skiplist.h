@@ -176,6 +176,7 @@ struct SkipList<Key, Comparator>::Node {
   std::atomic<Node*> next_[1];
 };
 
+// 创建一个
 template <typename Key, class Comparator>
 typename SkipList<Key, Comparator>::Node* SkipList<Key, Comparator>::NewNode(
     const Key& key, int height) {
@@ -261,12 +262,16 @@ SkipList<Key, Comparator>::FindGreaterOrEqual(const Key& key,
                                               Node** prev) const {
   Node* x = head_;
   int level = GetMaxHeight() - 1;
+
+  // 从最高层开始遍历
   while (true) {
     Node* next = x->Next(level);
+    // 如果key大于当前node，则继续找
     if (KeyIsAfterNode(key, next)) {
       // Keep searching in this list
       x = next;
     } else {
+      // prev应该是为了记录路径
       if (prev != nullptr) prev[level] = x;
       if (level == 0) {
         return next;
@@ -335,7 +340,9 @@ template <typename Key, class Comparator>
 void SkipList<Key, Comparator>::Insert(const Key& key) {
   // TODO(opt): We can use a barrier-free variant of FindGreaterOrEqual()
   // here since Insert() is externally synchronized.
+  // 定义一个高度为12的数组，有点忘记c++
   Node* prev[kMaxHeight];
+
   Node* x = FindGreaterOrEqual(key, prev);
 
   // Our data structure does not allow duplicate insertion

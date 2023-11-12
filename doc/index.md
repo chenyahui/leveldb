@@ -116,12 +116,16 @@ process (i.e., not a reboot) will not cause any loss since even when sync is
 false, an update is pushed from the process memory into the operating system
 before it is considered done.
 
+注意，如果只是写入进程挂掉了，并非机器重启，将不会导致任何丢失。（怎么做到的？
+
 Asynchronous writes can often be used safely. For example, when loading a large
 amount of data into the database you can handle lost updates by restarting the
 bulk load after a crash. A hybrid scheme is also possible where every Nth write
 is synchronous, and in the event of a crash, the bulk load is restarted just
 after the last synchronous write finished by the previous run. (The synchronous
 write can update a marker that describes where to restart on a crash.)
+
+混合方案是，每到第N的格式化，就改成同步的？
 
 `WriteBatch` provides an alternative to asynchronous writes. Multiple updates
 may be placed in the same WriteBatch and applied together using a synchronous

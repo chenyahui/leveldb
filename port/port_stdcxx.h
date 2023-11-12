@@ -71,8 +71,12 @@ class CondVar {
   CondVar& operator=(const CondVar&) = delete;
 
   void Wait() {
+    // adopt_lock表示，lock在传入的时候，已经上锁了，unique_lock不需要再次上锁
     std::unique_lock<std::mutex> lock(mu_->mu_, std::adopt_lock);
     cv_.wait(lock);
+
+    // 这里并不是释放锁，而且接触lock和mu的关联关系，以免退出作用域的时候，自动释放了锁
+    // 这里没想明白的一点是，既然这样，为啥要用unique_lock呢？不用似乎效果是一样的
     lock.release();
   }
   void Signal() { cv_.notify_one(); }

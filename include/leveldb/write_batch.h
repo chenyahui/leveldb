@@ -75,6 +75,8 @@ class LEVELDB_EXPORT WriteBatch {
  private:
   friend class WriteBatchInternal;
 
+  // rep_ 可能得全称是"representation"
+  // 表示批量写入操作的内部表示形式 里面存储了key、value、操作符等等信息
   std::string rep_;  // See comment in write_batch.cc for the format of rep_
 };
 

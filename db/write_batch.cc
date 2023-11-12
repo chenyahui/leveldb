@@ -95,6 +95,7 @@ void WriteBatchInternal::SetSequence(WriteBatch* b, SequenceNumber seq) {
   EncodeFixed64(&b->rep_[0], seq);
 }
 
+// 我们看WriteBatch的底层表示
 void WriteBatch::Put(const Slice& key, const Slice& value) {
   WriteBatchInternal::SetCount(this, WriteBatchInternal::Count(this) + 1);
   rep_.push_back(static_cast<char>(kTypeValue));
